@@ -1,6 +1,6 @@
 # Testing report (homepage refinement pass)
 
-Run on 2026-10-29. Local checks used the production build (`next build` + `next start`) driven by Playwright 1.63.0; the live Worker was checked separately (see the end of this file).
+Run on 2026-10-29 with Playwright 1.63.0. Local checks serve the static export (`./out`) with `wrangler dev`, the same static-assets runtime used in production. The live site was then tested after each deploy (see "Live deployment").
 
 ## Page length before and after
 Full-page height after scrolling through the whole page (script `scripts/audit.mjs`). "Before" is the previous live build.
@@ -37,6 +37,14 @@ Screenshots: `artifacts/screenshots/before/` and `artifacts/screenshots/after/` 
 | Focus ring: terracotta on ivory, sand on forest | 6.4, 8.9 |
 
 The earlier terracotta `#8E5846` measured 3.98 on sand, below 4.5 for small text, so it was darkened. The lighter clay `#B47C69` (3.15) is only used for decorative rules. This is arithmetic on the design tokens, not a full audit with assistive technology.
+
+## Live deployment (https://selacove.rssworldnet.work)
+Testing after the first deploy of this pass found two hosting problems that the local build did not have, and both were fixed in code:
+
+1. **Hangs and 503s from the OpenNext Worker.** About one homepage request in four hung for 25 s or returned 503, and some `/_next/image` requests failed. Over the same network path, selacove.com answered 25/25 requests and static files on the concept's own host answered 20/20. Fix: the site is now a static export served as static assets only, with pre-generated responsive image widths. Afterwards: 30/30 homepage requests returned 200 in about 0.2 s.
+2. **Redirect loop on route-data files.** Next names the data files of dynamic `[slug]` routes with `$`. Cloudflare's static assets answered Chromium's prefetches for them with a 307 back to the same URL (`ERR_TOO_MANY_REDIRECTS`). Fix: each placeholder route now has its own folder (same URLs and content), so no `$` filenames are produced.
+
+Final live results (Chromium): the Playwright suite passed 44/44 against the live URL (`BASE_URL=https://selacove.rssworldnet.work npx playwright test --project=chromium`), and `scripts/verify.mjs` passed 52/53. The one failure is the Firefox smoke test: this sandbox's TLS proxy certificate is not trusted by Playwright's Firefox (`SEC_ERROR_UNKNOWN_ISSUER`), and I did not disable certificate checks to get around it. Firefox was therefore verified only against the local static build (44/44). The `X-Robots-Tag: noindex` header and the robots meta tag are present on the live site.
 
 ## Not done or not possible
 - External destinations (Instagram, Pinterest, Etsy) were not opened in a browser. A plain request returned 200 for Pinterest, redirected Instagram to its login page, and Etsy answered 403 to scripted requests. I did not try to get around those protections or log in. Only the hrefs and attributes are verified.
