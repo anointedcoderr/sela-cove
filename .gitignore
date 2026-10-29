@@ -1,0 +1,7 @@
+node_modules
+.next
+artifacts/screenshots/tmp
+test-results
+playwright-report
+*.tsbuildinfo
+next-env.d.ts
