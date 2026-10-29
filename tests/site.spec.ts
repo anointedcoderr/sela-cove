@@ -233,11 +233,88 @@ test.describe('responsive', () => {
   });
 });
 
-test.describe('motion', () => {
-  test.use({ reducedMotion: 'reduce' });
-  test('reduced motion leaves all content visible without scrolling', async ({ page }) => {
+test.describe('motion, no-JS and print', () => {
+  test.describe('reduced motion', () => {
+    test.use({ reducedMotion: 'reduce' });
+    test('no section is animated or transparent', async ({ page }) => {
+      await page.goto('/');
+      const states = await page.$$eval('.reveal', (els) => els.map((e) => ({ a: getComputedStyle(e).animationName, o: getComputedStyle(e).opacity })));
+      expect(states.length).toBeGreaterThan(5);
+      for (const st of states) { expect(st.a).toBe('none'); expect(st.o).toBe('1'); }
+    });
+  });
+
+  test('sections are never transparent, even mid-animation', async ({ page }) => {
     await page.goto('/');
-    const hidden = await page.$$eval('[data-reveal="hidden"]', (els) => els.length);
-    expect(hidden).toBe(0);
+    const opacities = await page.$$eval('.reveal', (els) => els.map((e) => getComputedStyle(e).opacity));
+    expect(opacities.every((o) => o === '1')).toBe(true);
+  });
+
+  test.describe('JavaScript disabled', () => {
+    test.use({ javaScriptEnabled: false });
+    test('homepage content and links are present and visible', async ({ page }) => {
+      await page.goto('/');
+      await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+      for (const name of ['You don’t always need to start over.', 'Find the support that fits where you are.', 'The Stop Changing Everything Audit', 'Thoughtful resources for the business you’re building.', 'A little more clarity. A lot less second-guessing.', 'Notes for the moments in between.']) {
+        await expect(page.getByRole('heading', { name }).first()).toBeVisible();
+      }
+      await expect(page.getByRole('link', { name: /Meet Patina/ })).toHaveAttribute('href', '/shop/patina-website-template');
+    });
+  });
+
+  test('print view keeps the content and hides the sticky header', async ({ page }) => {
+    await page.goto('/');
+    await page.emulateMedia({ media: 'print' });
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+    await expect(page.getByRole('banner')).toBeHidden();
+  });
+});
+
+test.describe('layout details', () => {
+  test('tablet journal shows full titles with comfortable columns', async ({ page }) => {
+    await page.setViewportSize({ width: 768, height: 1024 });
+    await page.goto('/');
+    const items = page.locator('section[aria-labelledby="journal-title"] ul > li');
+    await expect(items).toHaveCount(3);
+    for (let i = 0; i < 3; i++) {
+      const box = await items.nth(i).boundingBox();
+      expect(box!.width).toBeGreaterThanOrEqual(320);
+    }
+    const titles = await page.locator('section[aria-labelledby="journal-title"] h3').evaluateAll((hs) =>
+      hs.map((h) => ({ text: h.textContent, lines: Math.round(h.getBoundingClientRect().height / parseFloat(getComputedStyle(h).lineHeight)), clamp: getComputedStyle(h).webkitLineClamp, overflow: getComputedStyle(h).overflow })),
+    );
+    for (const t of titles) { expect(t.lines, t.text!).toBeLessThanOrEqual(3); expect(t.clamp).toBe('none'); }
+    expect(titles.map((t) => t.text)).toContain('What makes a logo look professional (and the mistakes that make it look cheap)');
+  });
+
+  test('preview note is present and quiet', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByText('A homepage design preview. The other pages are still in preparation.')).toBeVisible();
+  });
+
+  test('footer links and card links have generous hit areas', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/');
+    const links = page.getByRole('contentinfo').getByRole('link');
+    const n = await links.count();
+    for (let i = 0; i < n; i++) {
+      const b = await links.nth(i).boundingBox();
+      expect(b!.height, await links.nth(i).textContent() ?? '').toBeGreaterThanOrEqual(43);
+    }
+    // The shared card link covers the whole card: the image area of a product card is clickable.
+    const card = page.locator('.product-card').first();
+    await card.scrollIntoViewIfNeeded();
+    const img = await card.locator('img').boundingBox();
+    await page.mouse.click(img!.x + img!.width / 2, img!.y + img!.height / 2);
+    await expect(page).toHaveURL(/\/shop\/brand-foundation-workbook$/);
+  });
+
+  test('external social links open safely in a new tab', async ({ page }) => {
+    await page.goto('/');
+    for (const host of ['instagram.com/sela_cove', 'pinterest.com/sela_cove', 'etsy.com/shop/SelaCove']) {
+      const link = page.getByRole('contentinfo').locator(`a[href*="${host}"]`);
+      await expect(link).toHaveAttribute('target', '_blank');
+      await expect(link).toHaveAttribute('rel', /noopener/);
+    }
   });
 });

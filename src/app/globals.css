@@ -10,7 +10,7 @@
   --color-sand: #e3d4c4;
   --color-sand-light: #eee4d8;
   --color-clay: #b47c69;
-  --color-clay-deep: #8e5846;
+  --color-clay-deep: #7f4b3a;
 
   --font-display: var(--font-instrument), 'Times New Roman', serif;
   --font-sans: var(--font-manrope), system-ui, sans-serif;
@@ -49,8 +49,9 @@
     font-size: 0.72rem; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; line-height: 1.4;
   }
   .display-xl { font-size: clamp(3.1rem, 6.6vw + 0.9rem, 6.8rem); line-height: 0.96; }
-  .display-lg { font-size: clamp(2.25rem, 4.6vw + 0.5rem, 4.6rem); line-height: 1.02; }
-  .display-md { font-size: clamp(1.75rem, 2.6vw + 0.7rem, 2.9rem); line-height: 1.08; }
+  .display-lg { font-size: clamp(2rem, 3.2vw + 0.9rem, 3.5rem); line-height: 1.04; }
+  .display-md { font-size: clamp(1.5rem, 1.1vw + 1.2rem, 2.1rem); line-height: 1.1; }
+  .title-sm { font-family: var(--font-display); font-size: clamp(1.3rem, 0.5vw + 1.2rem, 1.6rem); line-height: 1.16; letter-spacing: -0.01em; }
   .lede { font-size: clamp(1.05rem, 0.5vw + 0.95rem, 1.28rem); line-height: 1.65; }
   .hairline { border-color: color-mix(in srgb, var(--color-forest) 22%, transparent); }
 
@@ -82,13 +83,45 @@
   .group:hover .img-frame img { transform: scale(1.025); }
 }
 
-/* Reveal: content is visible by default; JS opts below-the-fold elements in */
-[data-reveal='hidden'] { opacity: 0; transform: translateY(18px); }
-[data-reveal] { transition: opacity .9s var(--ease-quiet), transform .9s var(--ease-quiet); transition-delay: var(--reveal-delay, 0ms); }
-[data-reveal='shown'] { opacity: 1; transform: none; }
+/* Product cards: compact image-left rows on phones, stacked cards from 640px. */
+.product-card { display: grid; grid-template-columns: 6.75rem 1fr; column-gap: 1rem; row-gap: 0.15rem; align-content: start;
+  grid-template-areas: 'img kind' 'img title' 'img price' 'blurb blurb' 'cta cta'; }
+.product-card .pc-img { grid-area: img; } .product-card .pc-kind { grid-area: kind; } .product-card .pc-title { grid-area: title; }
+.product-card .pc-price { grid-area: price; } .product-card .pc-blurb { grid-area: blurb; margin-top: 0.75rem; } .product-card .pc-cta { grid-area: cta; margin-top: 0.75rem; }
+@media (min-width: 400px) { .product-card { grid-template-columns: 8rem 1fr; } }
+@media (min-width: 640px) {
+  .product-card { grid-template-columns: 1fr auto; row-gap: 0; grid-template-areas: 'img img' 'kind price' 'title title' 'blurb blurb' 'cta cta'; }
+  .product-card .pc-kind, .product-card .pc-price { margin-top: 1rem; }
+  .product-card .pc-title { margin-top: 0.5rem; } .product-card .pc-blurb { margin-top: 0.5rem; } .product-card .pc-cta { margin-top: 1rem; }
+}
+
+/* Pathway cards: stacked on phones and desktop columns; a single comfortable row each on tablets. */
+.path-card { display: grid; grid-template-columns: 5.25rem 1fr; column-gap: 1.25rem; align-content: start; height: 100%;
+  grid-template-areas: 'img head' 'text text' 'cta cta'; }
+.path-card .pa-img { grid-area: img; } .path-card .pa-head { grid-area: head; } .path-card .pa-text { grid-area: text; margin-top: 1rem; }
+.path-card .pa-cta { grid-area: cta; margin-top: 1.25rem; align-self: end; }
+@media (min-width: 640px) { .path-card { grid-template-columns: 6.5rem 1fr; } }
+@media (min-width: 768px) and (max-width: 1279.98px) {
+  .path-card { grid-template-columns: 6.5rem 1fr; column-gap: 1.75rem; grid-template-areas: 'img head' 'img text' 'img cta'; }
+  .path-card .pa-text { margin-top: 0.5rem; } .path-card .pa-cta { margin-top: 1rem; align-self: start; justify-self: start; }
+  .path-card .pa-cta .btn { width: auto; }
+}
+
+/* Motion is an enhancement: sections only drift up slightly as they enter. They are never transparent or hidden, with or without script. */
+@keyframes reveal-rise { from { transform: translateY(16px); } to { transform: none; } }
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal { animation: reveal-rise linear both; animation-timeline: view(); animation-range: entry 0% entry 40%; }
+  }
+}
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; transition-delay: 0ms !important; }
-  [data-reveal='hidden'] { opacity: 1; transform: none; }
+  *, *::before, *::after { animation: none !important; transition-duration: .001ms !important; transition-delay: 0ms !important; }
+}
+
+@media print {
+  .reveal { animation: none !important; opacity: 1 !important; transform: none !important; }
+  header, .no-print { display: none !important; }
+  body { background: #fff; }
 }

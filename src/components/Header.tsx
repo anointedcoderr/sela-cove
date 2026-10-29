@@ -12,6 +12,7 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const toggleRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
 
   const close = useCallback((returnFocus = false) => {
     setOpen(false);
@@ -32,6 +33,11 @@ export function Header() {
   useEffect(() => {
     if (!open) return;
     document.body.style.overflow = 'hidden';
+    // The preview note above the header scrolls away, so anchor the menu to the header's actual bottom edge.
+    const place = () => {
+      if (headerRef.current && panelRef.current) panelRef.current.style.top = `${headerRef.current.getBoundingClientRect().bottom}px`;
+    };
+    place();
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') close(true);
       if (e.key === 'Tab' && panelRef.current) {
@@ -42,7 +48,7 @@ export function Header() {
         else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
       }
     };
-    const onResize = () => { if (window.innerWidth >= 1024) setOpen(false); };
+    const onResize = () => { if (window.innerWidth >= 1024) setOpen(false); else place(); };
     document.addEventListener('keydown', onKey);
     window.addEventListener('resize', onResize);
     return () => {
@@ -56,6 +62,7 @@ export function Header() {
 
   return (
     <header
+      ref={headerRef}
       className={`sticky top-0 z-50 border-b transition-colors duration-500 ${
         scrolled || open ? 'bg-ivory border-forest/15' : 'bg-ivory border-transparent'
       }`}
@@ -107,7 +114,7 @@ export function Header() {
       <div
         id="mobile-menu"
         ref={panelRef}
-        className={`fixed inset-x-0 top-[4.5rem] bottom-0 z-40 overflow-y-auto bg-ivory transition-[opacity,visibility,transform] duration-500 ease-[var(--ease-quiet)] lg:hidden ${
+        className={`fixed inset-x-0 bottom-0 top-[4.5rem] z-40 overflow-y-auto bg-ivory transition-[opacity,visibility,transform] duration-500 ease-[var(--ease-quiet)] lg:hidden ${
           open ? 'visible translate-y-0 opacity-100' : 'invisible -translate-y-2 opacity-0'
         }`}
       >
@@ -119,7 +126,7 @@ export function Header() {
                   href={item.href}
                   tabIndex={open ? 0 : -1}
                   aria-current={isActive(item.href) ? 'page' : undefined}
-                  className="flex items-baseline justify-between py-4 font-display text-[2rem] leading-none"
+                  className="flex min-h-14 items-baseline justify-between py-3.5 font-display text-[1.9rem] leading-none"
                   onClick={() => close()}
                 >
                   <span>{item.label}</span>
@@ -133,7 +140,7 @@ export function Header() {
               Take the Free Audit
             </Link>
             <p className="mt-6 text-xs leading-relaxed text-forest/70">
-              An independent design concept by RSS World Network. Not the official Sela Cove website.
+              An independent design concept by RSS World Network. Not the official Sela Cove website. Only the homepage is designed so far.
             </p>
           </div>
         </nav>

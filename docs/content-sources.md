@@ -7,11 +7,12 @@ Checked in a real Chromium session on 2026-10-29. Prices were live at that time 
 | The home page is still a "Coming Soon" page dated **October 31, 2026** (unchanged). | https://selacove.com | Links: Showit website templates, Canva mini brand kits, workbooks & guides, Instagram. |
 | Audit: free; 9-page PDF; KEEP / REFINE / TEST / STOP / LATER; Brand Clarity check; Visual Brand Direction check; quick exercises and examples; "What Does Your Pattern Look Like?"; early-stage small business owners; digital download | https://selacove.com/audit | "A quick brand diagnostic for the moment when something feels off and you are not sure what actually needs attention." |
 | Brand Foundation Workbook: 29 pages; intro price $29; KNOW / BELIEVE / TEST; self-guided | https://selacove.com/shop | "A 29-page workbook for organizing what sits underneath your brand…" |
-| Halden Mini Brand Kit $37; Talia Blake Mini Brand Kit $37 (Canva premade mini brand kits) | https://selacove.com/shop | |
+| Halden Mini Brand Kit $37; Talia Blake Mini Brand Kit $37 (Canva premade mini brand kits, "Customizable Brands") | https://selacove.com/shop | The shop gives no further Halden description, so its card says only what the shop says. |
+| Talia Blake: Canva brand kit for wedding and portrait photographers; logo variations, colour palette, typography, editable guidelines | https://selacove.com/2026/04/22/premade-logo-brand-kit-for-photographers/ | "Talia Blake is a complete Canva brand kit designed for wedding and portrait photographers". |
 | Patina Website Template $249; Portfolio & Blog Website Template $129 (Showit) | https://selacove.com/shop and /audit | |
 | Creative Brand Direction: collaborative 1:1 for early-stage small business owners | https://selacove.com/shop, /audit | "Want another set of eyes on the whole thing?" |
-| Founder story, "photographer turned brand and website template designer", "real-life budget", "priced out of the help", pull quote | https://selacove.com/about | Personal details on that page (family, faith quote, degrees) are intentionally left out. |
-| Journal: three article titles, excerpts, cover images | https://selacove.com/blog/ | Titles shortened/re-cased only; no dates or authors shown. |
+| Founder story, "photographer turned brand and website template designer", "real-life budget", "priced out of the help", pull quote | https://selacove.com/about | Personal details on that page (family, faith quote, degrees) are intentionally left out. The About page also shows a portrait next to Debbie's bio, but its file name looks like generated art (`u1632386269_hispanic_woman_…`), so it is **not** used or labelled as Debbie. No verified photograph of her is available. |
+| Journal: three article titles, excerpts, cover images | https://selacove.com/blog/ | Titles are the live titles; excerpts are shortened from the live previews. No dates or authors shown. |
 | Social links: Instagram, Pinterest, Etsy | page footers | The Facebook link points to a personal photography page and is omitted. |
 
 ## Live-site state (for context)

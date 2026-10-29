@@ -31,64 +31,61 @@ export type Product = {
   image: string;
   alt: string;
   cta: string;
-  ratio: string; // tailwind aspect class
+  position?: string; // object-position for the card crop
 };
 
+// Copy and prices were checked against selacove.com/shop and the Talia Blake journal post on 2026-10-29.
 export const products: Product[] = [
   {
     slug: 'brand-foundation-workbook',
     name: 'Brand Foundation Workbook',
-    kind: 'Workbook · Self-guided',
-    blurb: 'A 29-page workbook for sorting out what sits underneath your brand, before you touch anything visual.',
+    kind: 'Workbook',
+    blurb: 'A 29-page self-guided workbook for sorting out what sits underneath your brand before you change anything visual.',
     price: '$29 intro price',
-    image: '/assets/products/brand-foundation-workbook-cover.webp',
-    alt: 'Deep red cover of the Brand Foundation workbook, subtitled A Working Guide for Early-Stage Businesses',
+    image: '/assets/products/brand-foundation-workbook-mockup.webp',
+    alt: 'The deep red Brand Foundation workbook cover, subtitled A Working Guide for Early-Stage Businesses',
     cta: 'Discover the Workbook',
-    ratio: 'aspect-[5/4]',
   },
   {
     slug: 'halden-mini-brand-kit',
     name: 'Halden Mini Brand Kit',
     kind: 'Canva mini brand kit',
-    blurb: 'A premade, customizable brand for Canva, shown here as printed cards in warm gold and black.',
+    blurb: 'A premade, customizable brand for Canva that you make your own.',
     price: '$37',
     image: '/assets/products/halden-mini-brand-kit.webp',
-    alt: 'Gold and black Halden brand cards held above a laptop keyboard',
+    alt: 'Gold and black Halden brand cards fanned out above a laptop keyboard',
     cta: 'Explore the Kit',
-    ratio: 'aspect-[5/4]',
+    position: '50% 38%',
   },
   {
     slug: 'talia-blake-mini-brand-kit',
     name: 'Talia Blake Mini Brand Kit',
     kind: 'Canva mini brand kit',
-    blurb: 'A premade, customizable brand for Canva, introduced with a soft wordmark over black-and-white photography.',
+    blurb: 'A Canva brand kit for wedding and portrait photographers, with logo variations, a palette, fonts and editable guidelines.',
     price: '$37',
     image: '/assets/products/talia-blake-mini-brand-kit.webp',
-    alt: 'Talia Blake wordmark over a black-and-white photograph of a veiled bride from behind',
+    alt: 'The Talia Blake wordmark over a black-and-white photograph of a bride with a veil, seen from behind',
     cta: 'Explore the Kit',
-    ratio: 'aspect-[5/4]',
   },
   {
     slug: 'patina-website-template',
     name: 'Patina Website Template',
     kind: 'Showit website template',
-    blurb: 'A Showit website template you customize yourself, shown here in a dark, image-led layout.',
+    blurb: 'A Showit website template you customize yourself.',
     price: '$249',
     image: '/assets/templates/patina-template.webp',
-    alt: 'Two page layouts of the Patina Showit template on a dark ground',
+    alt: 'Two page layouts from the Patina Showit template on a dark ground',
     cta: 'Meet Patina',
-    ratio: 'aspect-[5/4]',
   },
   {
     slug: 'portfolio-blog-website-template',
     name: 'Portfolio & Blog Website Template',
     kind: 'Showit website template',
-    blurb: 'A light portfolio and blog template you customize yourself.',
+    blurb: 'A Showit portfolio and blog template you customize yourself.',
     price: '$129',
     image: '/assets/templates/portfolio-blog-template.webp',
-    alt: 'Two page layouts of a light portfolio and blog Showit template',
+    alt: 'Two page layouts from a light portfolio and blog Showit template',
     cta: 'Explore the Template',
-    ratio: 'aspect-[5/4]',
   },
 ];
 
@@ -109,13 +106,14 @@ export type Article = {
   source: string;
 };
 
+// Titles are the live journal titles; excerpts are shortened from the live previews.
 export const articles: Article[] = [
   {
     slug: 'why-cant-i-get-my-logo-to-look-right',
     title: 'Why can’t I get my logo to look right?',
     category: 'Logo & identity',
     excerpt:
-      'When most people start thinking about branding, the logo is the first thing on the list. You open Canva, look through some fonts, save a bunch of things on Pinterest…',
+      'When most people start thinking about branding, the logo comes first. You open Canva, look through some fonts, save a bunch of things on Pinterest, and then it still doesn’t look right.',
     image: '/assets/blog/logo-not-right.webp',
     alt: 'A woman at a desk beside a sunlit window, resting her hand on her face as she looks at her laptop',
     source: 'https://selacove.com/2026/09/18/logo-brand-identity/',
@@ -124,8 +122,7 @@ export const articles: Article[] = [
     slug: 'what-makes-a-logo-look-professional',
     title: 'What makes a logo look professional (and the mistakes that make it look cheap)',
     category: 'Logo & identity',
-    excerpt:
-      'To make a logo look professional, you remove things instead of adding them. A high-end logo comes from restraint, room to breathe, and one strong idea done well.',
+    excerpt: 'You remove things instead of adding them. A high-end logo comes from restraint, room to breathe, and one strong idea.',
     image: '/assets/blog/professional-logo.webp',
     alt: 'A cream envelope with a patterned liner beside a dark branded card',
     source: 'https://selacove.com/2026/06/24/what-makes-a-logo-look-professional/',
@@ -134,8 +131,7 @@ export const articles: Article[] = [
     slug: 'how-to-find-the-right-keywords-for-your-small-business',
     title: 'How to find the right keywords for your small business (for free)',
     category: 'Website & search',
-    excerpt:
-      'Google reads for meaning now, the way a person would. So the natural next question is the one I hear most: “Okay, but how do I find my keywords?”',
+    excerpt: 'Google reads for meaning now, the way a person would. So the question I hear most is: how do I find my keywords?',
     image: '/assets/blog/keywords.webp',
     alt: 'A sand-colored card titled How to Find the Right Keywords',
     source: 'https://selacove.com/2026/06/09/how-to-find-the-right-keywords-for-your-small-business/',

@@ -25,7 +25,8 @@ npm run build
 npx playwright test            # Chromium; starts `next start` on :3100 if nothing is running
 BROWSERS=firefox,webkit npx playwright test   # adds Firefox and/or WebKit (npx playwright install firefox webkit)
 npm run lint                   # tsc --noEmit
-BASE_URL=http://localhost:3100 npm run shots   # screenshots into artifacts/screenshots/
+node scripts/audit.mjs                  # full-page screenshots + layout metrics (BASE_URL, OUT, IMGS=1 env vars)
+BASE_URL=https://your-deployment node scripts/verify.mjs   # manual-style browser checks against any deployment
 ```
 
 If the Playwright browser build in your environment differs from the pinned `@playwright/test` version, install matching browsers with `npx playwright install chromium`.
@@ -38,7 +39,7 @@ src/components/     Header, Footer, Button, Wordmark, Reveal, Placeholder, home/
 src/data/site.ts    nav, products, articles, placeholder pages
 src/app/globals.css design tokens (colors, type scale, buttons)
 public/assets/      optimized local images from selacove.com (see docs/asset-manifest.md)
-scripts/            optimize-assets.mjs, screenshots.mjs
+scripts/            optimize-assets.mjs, audit.mjs, verify.mjs, screenshots.mjs
 tests/              Playwright suite
 docs/               asset-manifest.md, content-sources.md, testing-report.md
 ```

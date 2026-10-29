@@ -21,12 +21,12 @@ const manrope = localFont({
 });
 
 export const metadata: Metadata = {
-  title: { default: 'Sela Cove — an independent design concept', template: '%s · Sela Cove concept' },
+  title: { default: 'Sela Cove: an independent design concept', template: '%s · Sela Cove concept' },
   description:
     'A private, independent website redesign concept for Sela Cove by RSS World Network. Not the official Sela Cove website.',
   robots: { index: false, follow: false, nocache: true, googleBot: { index: false, follow: false } },
   openGraph: {
-    title: 'Sela Cove — an independent design concept',
+    title: 'Sela Cove: an independent design concept',
     description: 'A private redesign concept by RSS World Network. Not the official Sela Cove website.',
     type: 'website',
   },
@@ -38,6 +38,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${instrument.variable} ${manrope.variable}`}>
       <body>
+        <p className="no-print border-b border-forest/15 bg-sand-light px-4 py-2 text-center text-[0.74rem] leading-snug tracking-[0.02em] text-forest/85">
+          A homepage design preview. The other pages are still in preparation.
+        </p>
         <Header />
         <main id="main">{children}</main>
         <Footer />
