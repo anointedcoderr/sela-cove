@@ -9,13 +9,16 @@ const routes = [
   '/journal/how-to-find-the-right-keywords-for-your-small-business',
 ];
 
+const ORIGIN = new URL(process.env.BASE_URL ?? 'http://localhost').origin.replace(/:\d+$/, '');
+const HOME = /^https?:\/\/[^/]+\/$/;
+
 const widths = [320, 375, 390, 430, 768, 1024, 1280, 1440, 1920];
 
 function watch(page: Page) {
   const problems: string[] = [];
   page.on('console', (m) => { if (m.type() === 'error') problems.push(`console: ${m.text()}`); });
   page.on('pageerror', (e) => problems.push(`pageerror: ${e.message}`));
-  page.on('response', (r) => { if (r.status() >= 400 && r.url().startsWith('http://localhost')) problems.push(`${r.status()} ${r.url()}`); });
+  page.on('response', (r) => { if (r.status() >= 400 && r.url().startsWith(ORIGIN)) problems.push(`${r.status()} ${r.url()}`); });
   // Browsers cancel in-flight link prefetches when you navigate away (ERR_ABORTED / NS_BINDING_ABORTED); that is not a failure.
   page.on('requestfailed', (r) => { if (!/ABORTED/.test(r.failure()?.errorText ?? '')) problems.push(`failed: ${r.url()} ${r.failure()?.errorText}`); });
   return problems;
@@ -98,7 +101,7 @@ test.describe('homepage', () => {
       await expect(page).toHaveURL(new RegExp(url + '$'));
       await expect(page.getByText('Something thoughtful is taking shape.')).toBeVisible();
       await page.goBack();
-      await expect(page).toHaveURL(/localhost:\d+\/$/);
+      await expect(page).toHaveURL(HOME);
     }
   });
 });
@@ -117,7 +120,7 @@ test.describe('routes', () => {
       await page.waitForLoadState('networkidle');
       await expectAllImagesLoaded(page);
       await page.getByRole('link', { name: 'Back to Home' }).click();
-      await expect(page).toHaveURL(/localhost:\d+\/$/);
+      await expect(page).toHaveURL(HOME);
       expect(problems).toEqual([]);
     });
   }
@@ -146,7 +149,7 @@ test.describe('desktop navigation', () => {
     await page.goForward();
     await expect(page).toHaveURL(/\/about$/);
     await nav.getByRole('link', { name: 'Home' }).click();
-    await expect(page).toHaveURL(/localhost:\d+\/$/);
+    await expect(page).toHaveURL(HOME);
     await page.getByRole('banner').getByRole('link', { name: 'Take the Free Audit' }).click();
     await expect(page).toHaveURL(/\/audit$/);
   });

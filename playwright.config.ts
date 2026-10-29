@@ -7,8 +7,9 @@ export default defineConfig({
   timeout: 60_000,
   retries: 0,
   reporter: [['list'], ['html', { open: 'never' }]],
-  use: { baseURL: `http://localhost:${PORT}`, trace: 'retain-on-failure' },
-  webServer: {
+  // Set BASE_URL to test a deployment instead of the local build.
+  use: { baseURL: process.env.BASE_URL ?? `http://localhost:${PORT}`, trace: 'retain-on-failure' },
+  webServer: process.env.BASE_URL ? undefined : {
     command: `npx wrangler dev --port ${PORT}`, // serves ./out exactly like production static assets; run `npm run build` first
     url: `http://localhost:${PORT}`,
     reuseExistingServer: true,
