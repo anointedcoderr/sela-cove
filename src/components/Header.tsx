@@ -133,7 +133,7 @@ export function Header() {
               Take the Free Audit
             </Link>
             <p className="mt-6 text-xs leading-relaxed text-forest/70">
-              An independent design concept by RSS Word Network. Not the official Sela Cove website.
+              An independent design concept by RSS World Network. Not the official Sela Cove website.
             </p>
           </div>
         </nav>

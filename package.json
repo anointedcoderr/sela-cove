@@ -2,7 +2,7 @@
   "name": "sela-cove-concept",
   "version": "0.1.0",
   "private": true,
-  "description": "Independent redesign concept for Sela Cove by RSS Word Network. Not the official website.",
+  "description": "Independent redesign concept for Sela Cove by RSS World Network. Not the official website.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

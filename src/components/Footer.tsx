@@ -48,9 +48,9 @@ export function Footer() {
       <div className="container-page">
         <div className="border-t border-forest/25 py-7 text-[0.78rem] leading-relaxed text-forest/80">
           <p>
-            An independent, unsolicited design concept by <strong className="font-semibold text-forest">RSS Word Network</strong>. This is not the official Sela Cove website, has not been commissioned or approved by Sela Cove, and collects no customer information. Sela Cove names, products and imagery belong to their owner.
+            An independent, unsolicited design concept by <strong className="font-semibold text-forest">RSS World Network</strong>. This is not the official Sela Cove website, has not been commissioned or approved by Sela Cove, and collects no customer information. Sela Cove names, products and imagery belong to their owner.
           </p>
-          <p className="mt-2">© {new Date().getFullYear()} Concept design by RSS Word Network.</p>
+          <p className="mt-2">© {new Date().getFullYear()} Concept design by RSS World Network.</p>
         </div>
       </div>
     </footer>

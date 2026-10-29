@@ -1,6 +1,6 @@
 # Sela Cove — independent design concept
 
-A private, **unsolicited** website redesign concept for [Sela Cove](https://selacove.com) by **RSS Word Network** ("Quiet Coastal Editorial"). It is **not** the official Sela Cove website, has not been commissioned or approved by Sela Cove, collects no customer data, and is set to `noindex`. Do not publish it.
+A private, **unsolicited** website redesign concept for [Sela Cove](https://selacove.com) by **RSS World Network** ("Quiet Coastal Editorial"). It is **not** the official Sela Cove website, has not been commissioned or approved by Sela Cove, collects no customer data, and is set to `noindex`. Do not publish it.
 
 Stack: Next.js 16 (App Router) · TypeScript · Tailwind CSS 4 · lucide-react · Playwright. Fonts (Instrument Serif, Manrope) are self-hosted. Motion is CSS + one tiny `IntersectionObserver` component; `prefers-reduced-motion` is respected.
 

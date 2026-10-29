@@ -23,11 +23,11 @@ const manrope = localFont({
 export const metadata: Metadata = {
   title: { default: 'Sela Cove — an independent design concept', template: '%s · Sela Cove concept' },
   description:
-    'A private, independent website redesign concept for Sela Cove by RSS Word Network. Not the official Sela Cove website.',
+    'A private, independent website redesign concept for Sela Cove by RSS World Network. Not the official Sela Cove website.',
   robots: { index: false, follow: false, nocache: true, googleBot: { index: false, follow: false } },
   openGraph: {
     title: 'Sela Cove — an independent design concept',
-    description: 'A private redesign concept by RSS Word Network. Not the official Sela Cove website.',
+    description: 'A private redesign concept by RSS World Network. Not the official Sela Cove website.',
     type: 'website',
   },
 };

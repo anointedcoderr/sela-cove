@@ -64,7 +64,7 @@ test.describe('homepage', () => {
     const missingAlt = await page.$$eval('img', (imgs) => imgs.filter((i) => !i.getAttribute('alt')).length);
     expect(missingAlt).toBe(0);
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
-    await expect(page.getByRole('contentinfo')).toContainText('RSS Word Network');
+    await expect(page.getByRole('contentinfo')).toContainText('RSS World Network');
     await expect(page.getByRole('contentinfo')).toContainText('not the official Sela Cove website');
   });
 
@@ -111,7 +111,7 @@ test.describe('routes', () => {
       expect(res?.status()).toBe(200);
       await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
       await expect(page.getByText('Something thoughtful is taking shape.')).toBeVisible();
-      await expect(page.getByRole('contentinfo')).toContainText('RSS Word Network');
+      await expect(page.getByRole('contentinfo')).toContainText('RSS World Network');
       await page.reload();
       await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
       await page.waitForLoadState('networkidle');
