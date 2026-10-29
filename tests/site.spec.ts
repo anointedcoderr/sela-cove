@@ -16,8 +16,8 @@ function watch(page: Page) {
   page.on('console', (m) => { if (m.type() === 'error') problems.push(`console: ${m.text()}`); });
   page.on('pageerror', (e) => problems.push(`pageerror: ${e.message}`));
   page.on('response', (r) => { if (r.status() >= 400 && r.url().startsWith('http://localhost')) problems.push(`${r.status()} ${r.url()}`); });
-  // Next.js aborts in-flight link prefetches (?_rsc=) when you navigate away; that is expected, not a failure.
-  page.on('requestfailed', (r) => { if (!r.url().includes('_rsc=')) problems.push(`failed: ${r.url()}`); });
+  // Browsers cancel in-flight link prefetches when you navigate away (ERR_ABORTED / NS_BINDING_ABORTED); that is not a failure.
+  page.on('requestfailed', (r) => { if (!/ABORTED/.test(r.failure()?.errorText ?? '')) problems.push(`failed: ${r.url()} ${r.failure()?.errorText}`); });
   return problems;
 }
 

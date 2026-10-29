@@ -9,7 +9,7 @@ export default defineConfig({
   reporter: [['list'], ['html', { open: 'never' }]],
   use: { baseURL: `http://localhost:${PORT}`, trace: 'retain-on-failure' },
   webServer: {
-    command: `npx next start -p ${PORT}`, // run `npm run build` first
+    command: `npx wrangler dev --port ${PORT}`, // serves ./out exactly like production static assets; run `npm run build` first
     url: `http://localhost:${PORT}`,
     reuseExistingServer: true,
     timeout: 60_000,

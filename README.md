@@ -2,7 +2,7 @@
 
 A private, **unsolicited** website redesign concept for [Sela Cove](https://selacove.com) by **RSS World Network** ("Quiet Coastal Editorial"). It is **not** the official Sela Cove website, has not been commissioned or approved by Sela Cove, collects no customer data, and is set to `noindex`. Do not publish it.
 
-Stack: Next.js 16 (App Router) · TypeScript · Tailwind CSS 4 · lucide-react · Playwright. Fonts (Instrument Serif, Manrope) are self-hosted. Motion is CSS + one tiny `IntersectionObserver` component; `prefers-reduced-motion` is respected.
+Stack: Next.js 16 (App Router, **static export**) · TypeScript · Tailwind CSS 4 · lucide-react · Playwright. Fonts (Instrument Serif, Manrope) are self-hosted. Motion is CSS + one tiny `IntersectionObserver` component; `prefers-reduced-motion` is respected.
 
 ## Run it
 
@@ -14,8 +14,8 @@ npm run dev            # http://localhost:3000
 Production:
 
 ```bash
-npm run build
-npm run start          # http://localhost:3000   (or: npx next start -p 3100)
+npm run build          # writes the static site to ./out
+npm run start          # serves ./out with wrangler dev at http://localhost:3000
 ```
 
 ## Test it
@@ -50,6 +50,10 @@ docs/               asset-manifest.md, content-sources.md, testing-report.md
 - [Testing report](docs/testing-report.md)
 
 ## Deploying to Cloudflare Workers (private preview)
-The repo ships an explicit `wrangler.jsonc` and `open-next.config.ts` (OpenNext adapter). The Worker name **must match** the Worker in your Cloudflare dashboard (`sela-cove`), including the `WORKER_SELF_REFERENCE` service binding.
+The site is a static export (`output: 'export'`) deployed as **static assets only** (`wrangler.jsonc`, Worker name `sela-cove`). Nothing runs per request: pages, the 404 page and every image width are files in `./out`. Responses get `X-Robots-Tag: noindex` from `public/_headers`.
 
-In Workers Builds set **Deploy command** to `npm run deploy` (it runs `opennextjs-cloudflare build && opennextjs-cloudflare deploy`; the build command can stay `npm run build`). Local check: `npm run preview`. The site sends `X-Robots-Tag: noindex`, but a workers.dev URL is still reachable by anyone who has the link.
+Workers Builds: build command `npm run build`, deploy command `npm run deploy` (it builds and runs `wrangler deploy`). Local check: `npm run preview`.
+
+Images: `next/image` uses a custom loader (`src/lib/image-loader.ts`) that points at pre-generated widths in `public/assets/r/`. After changing anything in `public/assets`, run `npm run assets` (downloads/optimizes the sources, then regenerates the widths and `src/data/image-widths.json`) and commit the result.
+
+A workers.dev or custom-domain URL is still reachable by anyone who has the link.

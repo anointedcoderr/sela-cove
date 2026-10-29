@@ -1,0 +1,161 @@
+{
+  "/assets/blog/keywords.webp": {
+    "full": 1366,
+    "widths": [
+      128,
+      256,
+      384,
+      640,
+      828,
+      1080
+    ]
+  },
+  "/assets/blog/logo-not-right.webp": {
+    "full": 1456,
+    "widths": [
+      128,
+      256,
+      384,
+      640,
+      828,
+      1080,
+      1440
+    ]
+  },
+  "/assets/blog/professional-logo.webp": {
+    "full": 1600,
+    "widths": [
+      128,
+      256,
+      384,
+      640,
+      828,
+      1080,
+      1440
+    ]
+  },
+  "/assets/branding/hero-sea-window-desk.webp": {
+    "full": 1024,
+    "widths": [
+      128,
+      256,
+      384,
+      640,
+      828
+    ]
+  },
+  "/assets/editorial/beach-textiles.webp": {
+    "full": 1600,
+    "widths": [
+      128,
+      256,
+      384,
+      640,
+      828,
+      1080,
+      1440
+    ]
+  },
+  "/assets/editorial/sea-foam.webp": {
+    "full": 1200,
+    "widths": [
+      128,
+      256,
+      384,
+      640,
+      828,
+      1080
+    ]
+  },
+  "/assets/editorial/sea-waves.webp": {
+    "full": 1067,
+    "widths": [
+      128,
+      256,
+      384,
+      640,
+      828
+    ]
+  },
+  "/assets/products/audit-cover-portrait.webp": {
+    "full": 1100,
+    "widths": [
+      128,
+      256,
+      384,
+      640,
+      828,
+      1080
+    ]
+  },
+  "/assets/products/brand-foundation-cover-portrait.webp": {
+    "full": 1100,
+    "widths": [
+      128,
+      256,
+      384,
+      640,
+      828,
+      1080
+    ]
+  },
+  "/assets/products/brand-foundation-workbook-mockup.webp": {
+    "full": 1600,
+    "widths": [
+      128,
+      256,
+      384,
+      640,
+      828,
+      1080,
+      1440
+    ]
+  },
+  "/assets/products/halden-mini-brand-kit.webp": {
+    "full": 1400,
+    "widths": [
+      128,
+      256,
+      384,
+      640,
+      828,
+      1080
+    ]
+  },
+  "/assets/products/talia-blake-mini-brand-kit.webp": {
+    "full": 1600,
+    "widths": [
+      128,
+      256,
+      384,
+      640,
+      828,
+      1080,
+      1440
+    ]
+  },
+  "/assets/templates/patina-template.webp": {
+    "full": 1600,
+    "widths": [
+      128,
+      256,
+      384,
+      640,
+      828,
+      1080,
+      1440
+    ]
+  },
+  "/assets/templates/portfolio-blog-template.webp": {
+    "full": 1600,
+    "widths": [
+      128,
+      256,
+      384,
+      640,
+      828,
+      1080,
+      1440
+    ]
+  }
+}

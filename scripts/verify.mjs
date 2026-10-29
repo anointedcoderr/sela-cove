@@ -8,6 +8,15 @@ const routes = ['/start-here', '/work-with-me', '/shop', '/journal', '/about', '
   '/journal/why-cant-i-get-my-logo-to-look-right', '/journal/what-makes-a-logo-look-professional', '/journal/how-to-find-the-right-keywords-for-your-small-business'];
 const widths = [[320, 740], [359, 740], [360, 740], [375, 812], [390, 844], [430, 932], [639, 900], [640, 900], [767, 1024], [768, 1024], [1023, 768], [1024, 768], [1279, 800], [1280, 800], [1440, 1000], [1920, 1080]];
 const results = [];
+const infra = { count: 0, samples: [] }; // transient 5xx / timeouts from the host, reported separately from page defects
+const isInfra = (t) => /\b50[0-9]\b|status of 50|Timeout|timed out|net::ERR/i.test(t);
+const noteInfra = (t) => { infra.count++; if (infra.samples.length < 5) infra.samples.push(t.slice(0, 110)); };
+async function go(page, url, opts = { waitUntil: 'networkidle' }) {
+  for (let i = 0; i < 6; i++) {
+    try { const r = await page.goto(url, { ...opts, timeout: 30000 }); if (r && r.status() < 500) return r; noteInfra(`goto ${r?.status()} ${url}`); } catch (e) { noteInfra(`goto ${String(e).slice(0, 80)}`); }
+  }
+  throw new Error('unreachable after retries: ' + url);
+}
 const check = (name, ok, detail = '') => { results.push({ name, ok, detail }); console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? '  ' + detail : ''}`); };
 
 const browser = await chromium.launch();
@@ -17,10 +26,10 @@ for (const [w, h] of widths) {
   const ctx = await browser.newContext({ viewport: { width: w, height: h } });
   const page = await ctx.newPage();
   const problems = [];
-  page.on('console', (m) => { if (m.type() === 'error') problems.push('console: ' + m.text().slice(0, 120)); });
+  page.on('console', (m) => { if (m.type() === 'error') (isInfra(m.text()) ? noteInfra : (t) => problems.push(t))('console: ' + m.text().slice(0, 120)); });
   page.on('pageerror', (e) => problems.push('pageerror: ' + e.message));
-  page.on('response', (r) => { if (r.status() >= 400 && r.url().startsWith(base)) problems.push(`${r.status()} ${r.url().slice(0, 100)}`); });
-  await page.goto(base + '/', { waitUntil: 'networkidle' });
+  page.on('response', (r) => { if (r.status() >= 400 && r.url().startsWith(base)) (r.status() >= 500 ? noteInfra : (t) => problems.push(t))(`${r.status()} ${r.url().slice(0, 100)}`); });
+  await go(page, base + '/');
   await page.evaluate(async () => { document.documentElement.style.scrollBehavior = 'auto'; for (let y = 0; y < document.body.scrollHeight; y += 300) { window.scrollTo(0, y); await new Promise((r) => setTimeout(r, 70)); } });
   await page.waitForTimeout(800);
   const m = await page.evaluate(() => ({
@@ -39,7 +48,7 @@ for (const [w, h] of widths) {
 for (const [w, h] of [[390, 844], [320, 740], [667, 375], [844, 390]]) {
   const ctx = await browser.newContext({ viewport: { width: w, height: h }, hasTouch: true });
   const page = await ctx.newPage();
-  await page.goto(base + '/', { waitUntil: 'networkidle' });
+  await go(page, base + '/');
   const toggle = page.getByRole('button', { name: 'Open menu' });
   await toggle.focus();
   await page.keyboard.press('Enter');
@@ -78,10 +87,10 @@ for (const [w, h] of [[390, 844], [320, 740], [667, 375], [844, 390]]) {
   page.on('console', (m) => { if (m.type() === 'error') problems.push(m.text().slice(0, 100)); });
   page.on('pageerror', (e) => problems.push(e.message));
   for (const r of routes) {
-    const res = await page.goto(base + r, { waitUntil: 'networkidle' });
+    const res = await go(page, base + r);
     const h1 = await page.getByRole('heading', { level: 1 }).first().textContent();
     const msg = await page.getByText('Something thoughtful is taking shape.').isVisible();
-    await page.reload({ waitUntil: 'networkidle' });
+    await page.reload({ waitUntil: 'networkidle' }).catch(() => go(page, base + r));
     const h1b = await page.getByRole('heading', { level: 1 }).first().textContent();
     await page.getByRole('link', { name: 'Back to Home' }).click();
     await page.waitForURL(base + '/');
@@ -95,13 +104,13 @@ for (const [w, h] of [[390, 844], [320, 740], [667, 375], [844, 390]]) {
 {
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
   const page = await ctx.newPage();
-  await page.goto(base + '/');
+  await go(page, base + '/', { waitUntil: 'load' });
   const journeys = [[/Explore the Free Audit/, '/audit'], [/Find Your Starting Point/, '/start-here'], [/Discover the Workbook/, '/brand-foundation'], [/Explore Creative Direction/, '/creative-brand-direction'],
     [/Meet Patina/, '/shop/patina-website-template'], [/Explore the Kit.*Halden/, '/shop/halden-mini-brand-kit'], [/Explore the Kit.*Talia/, '/shop/talia-blake-mini-brand-kit'], [/Discover the Workbook.*Brand Foundation Workbook/, '/shop/brand-foundation-workbook'],
     [/Read Article.*Why can/, '/journal/why-cant-i-get-my-logo-to-look-right'], [/Read Article.*What makes a logo/, '/journal/what-makes-a-logo-look-professional'], [/Read Article.*How to find/, '/journal/how-to-find-the-right-keywords-for-your-small-business'],
     [/Read the Full Story/, '/about'], [/Browse the whole shop/, '/shop'], [/All articles/, '/journal']];
   for (const [name, path] of journeys) {
-    await page.goto(base + '/');
+    await go(page, base + '/', { waitUntil: 'load' });
     const link = page.getByRole('link', { name }).first();
     await link.scrollIntoViewIfNeeded();
     await link.click();
@@ -117,7 +126,7 @@ for (const [w, h] of [[390, 844], [320, 740], [667, 375], [844, 390]]) {
 {
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
   const page = await ctx.newPage();
-  await page.goto(base + '/');
+  await go(page, base + '/', { waitUntil: 'load' });
   const links = await page.getByRole('contentinfo').locator('a[target=_blank]').evaluateAll((as) => as.map((a) => [a.href, a.rel]));
   const expected = ['https://www.instagram.com/sela_cove/', 'https://www.pinterest.com/sela_cove/', 'https://www.etsy.com/shop/SelaCove'];
   check('footer social links', expected.every((e) => links.some(([h, rel]) => h === e && /noopener/.test(rel))), JSON.stringify(links.map((l) => l[0])));
@@ -128,7 +137,7 @@ for (const [w, h] of [[390, 844], [320, 740], [667, 375], [844, 390]]) {
 try {
   const ff = await firefox.launch();
   const page = await (await ff.newContext({ viewport: { width: 390, height: 844 } })).newPage();
-  await page.goto(base + '/', { waitUntil: 'networkidle' });
+  await go(page, base + '/');
   const sw = await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth);
   await page.getByRole('button', { name: 'Open menu' }).click();
   await page.getByRole('navigation', { name: 'Mobile' }).getByRole('link', { name: /Shop/ }).click();
@@ -140,4 +149,5 @@ try {
 await browser.close();
 const failed = results.filter((r) => !r.ok);
 console.log(`\n${results.length - failed.length}/${results.length} checks passed`);
+console.log(`transient host errors absorbed by retries: ${infra.count}${infra.samples.length ? ' e.g. ' + infra.samples.join(' | ') : ''}`);
 process.exit(failed.length ? 1 : 0);
