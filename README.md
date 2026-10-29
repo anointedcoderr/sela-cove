@@ -47,3 +47,8 @@ docs/               asset-manifest.md, content-sources.md, testing-report.md
 - [Asset manifest and rights status](docs/asset-manifest.md)
 - [Content sources](docs/content-sources.md)
 - [Testing report](docs/testing-report.md)
+
+## Deploying to Cloudflare Workers (private preview)
+The repo ships an explicit `wrangler.jsonc` and `open-next.config.ts` (OpenNext adapter). The Worker name **must match** the Worker in your Cloudflare dashboard (`sela-cove`), including the `WORKER_SELF_REFERENCE` service binding.
+
+In Workers Builds set **Deploy command** to `npm run deploy` (it runs `opennextjs-cloudflare build && opennextjs-cloudflare deploy`; the build command can stay `npm run build`). Local check: `npm run preview`. The site sends `X-Robots-Tag: noindex`, but a workers.dev URL is still reachable by anyone who has the link.
